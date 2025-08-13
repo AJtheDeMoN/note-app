@@ -37,7 +37,8 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 # Dependency to get current user from token
 async def get_current_user(token: str = Depends(oauth2_scheme)):
-    from database import user_collection, serialize_object # Local import to avoid circular dependency
+    from .database import user_collection, serialize_object # Local import to avoid circular dependency
+    from . import models
     
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,

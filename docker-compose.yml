@@ -40,7 +40,7 @@ services:
     build: ./frontend # Tells Docker to build the image from the Dockerfile in the ./frontend folder
     container_name: notes-frontend
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
       - ./frontend:/app # Mounts local frontend code into the container for live updates
       - /app/node_modules # A trick to prevent local node_modules from overwriting container's node_modules
