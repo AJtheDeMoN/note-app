@@ -1,0 +1,60 @@
+# docker-compose.yml
+
+version: "3.8"
+
+services:
+  # ------------------------------------
+  # MongoDB Database Service
+  # ------------------------------------
+  mongo:
+    image: mongo:latest
+    container_name: notes-db
+    ports:
+      - "27017:27017" # Maps the container's port to your local machine's port
+    volumes:
+      - mongo-data:/data/db # Persists database data on your local machine
+    networks:
+      - notes-app-network
+
+  # ------------------------------------
+  # FastAPI Backend Service
+  # ------------------------------------
+  backend:
+    build: ./backend # Tells Docker to build the image from the Dockerfile in the ./backend folder
+    container_name: notes-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env # Loads environment variables from the .env file in the backend folder
+    volumes:
+      - ./backend:/app # Mounts local backend code into the container for live updates during development
+    depends_on:
+      - mongo # Ensures that the 'mongo' service starts before the 'backend' service
+    networks:
+      - notes-app-network
+
+  # ------------------------------------
+  # Next.js Frontend Service
+  # ------------------------------------
+  frontend:
+    build: ./frontend # Tells Docker to build the image from the Dockerfile in the ./frontend folder
+    container_name: notes-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app # Mounts local frontend code into the container for live updates
+      - /app/node_modules # A trick to prevent local node_modules from overwriting container's node_modules
+    depends_on:
+      - backend # Ensures the 'backend' starts before the 'frontend'
+    networks:
+      - notes-app-network
+
+# ------------------------------------
+# Top-level Docker Configurations
+# ------------------------------------
+volumes:
+  mongo-data: # Defines the named volume for data persistence
+
+networks:
+  notes-app-network: # Defines the custom network for communication between services
+    driver: bridge
