@@ -1,10 +1,17 @@
+// src/components/notes/NoteForm.tsx
 'use client';
 
 import { useState } from 'react';
 import type { Note } from '@/types';
 import Button from '@/components/ui/Button';
 import { X } from 'lucide-react';
-import RichTextEditor from '@/components/ui/RichTextEditor'; 
+import dynamic from 'next/dynamic';
+
+// Dynamically import the RichTextEditor with SSR turned off
+const RichTextEditor = dynamic(() => import('@/components/ui/RichTextEditor'), {
+  ssr: false,
+  loading: () => <div className="p-3">Loading Editor...</div>,
+});
 
 interface NoteFormProps {
   note: Note | null;
@@ -38,7 +45,10 @@ export default function NoteForm({
   };
 
   return (
-    <div className="relative w-2xl max-w-lg rounded-lg border border-[#d4b28c] bg-[#f8f5e4] shadow-xl">
+    // --- RESPONSIVE CHANGES HERE ---
+    // On mobile (default): max-width is smaller (sm).
+    // On small screens and up (sm:): max-width is larger (lg).
+    <div className="relative w-full max-w-sm rounded-lg border border-[#d4b28c] bg-[#f8f5e4] shadow-xl sm:max-w-lg">
       {/* Header Section */}
       <div className="flex items-center justify-between rounded-t-lg bg-[#f4c198] px-4 py-3">
         {isEditMode ? (
@@ -62,7 +72,7 @@ export default function NoteForm({
         </button>
       </div>
 
-      <hr className="border-t-2 border-red-400 m-0" />
+      <hr className="m-0 border-t-2 border-red-400" />
 
       {/* Form for content and buttons */}
       <form onSubmit={handleSubmit} className="relative p-4">

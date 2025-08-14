@@ -38,7 +38,7 @@ export default function NoteForm({
   };
 
   return (
-    <div className="relative w-2xl max-w-lg rounded-lg border border-[#d4b28c] bg-[#f8f5e4] shadow-xl">
+    <div className="relative w-xs lg:w-2xl lg:max-w-lg rounded-lg border border-[#d4b28c] bg-[#f8f5e4] shadow-xl">
       {/* Header Section */}
       <div className="flex items-center justify-between rounded-t-lg bg-[#f4c198] px-4 py-3">
         {isEditMode ? (
