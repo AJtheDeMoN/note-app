@@ -5,6 +5,7 @@ import { useState } from 'react';
 import type { Note } from '@/types';
 import Button from '@/components/ui/Button';
 import { X } from 'lucide-react';
+import RichTextEditor from '@/components/ui/RichTextEditor'; 
 
 interface NoteFormProps {
   note: Note | null;
@@ -67,13 +68,9 @@ export default function NoteForm({
 
       {/* Form for content and buttons */}
       <form onSubmit={handleSubmit} className="relative p-4">
-        <textarea
-          id="note_content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          rows={10}
-          placeholder="Start writing your note..."
-          className="w-full rounded border-2 border-[#6b3323] bg-white p-3 mb-14 shadow-inner focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-50"
+        <RichTextEditor
+          content={content}
+          onChange={(newContent) => setContent(newContent)}
           disabled={isLoading}
         />
 

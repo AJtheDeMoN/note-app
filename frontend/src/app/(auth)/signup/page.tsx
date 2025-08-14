@@ -117,9 +117,9 @@ export default function SignUpPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="flex-1 bg-[#74c7d3] hover:bg-[#66b9c5] text-[#04313d] font-semibold py-2 rounded transition"
+                className="flex-1 bg-green-500 hover:bg-green-600 text-[#04313d] font-semibold py-2 rounded transition"
               >
-                {isLoading ? 'Creating...' : 'Sign Up'}
+                {isLoading ? 'Creating...' : 'Register'}
               </button>
               <Link
                 href="/signin"
