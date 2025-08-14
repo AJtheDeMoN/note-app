@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FFFDD0;
+  --foreground: #FFFDD0;
+}
+
+body {
+  background-color: #FFFDD0; /* Cream color */
 }
 
 @theme inline {
@@ -14,8 +18,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #FFFDD0;
+    --foreground: #f2d6c2;
   }
 }
 

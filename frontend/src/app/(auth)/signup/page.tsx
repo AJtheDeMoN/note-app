@@ -1,12 +1,9 @@
-// src/app/(auth)/signup/page.tsx
 'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Button from '../../../components/ui/Button';
-import Input from '../../../components/ui/Input';
-import axiosInstance from '../../../lib/axios';
+import axiosInstance from '@/lib/axios';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -14,6 +11,7 @@ export default function SignUpPage() {
     user_name: '',
     user_email: '',
     password: '',
+    confirm_password: '',
   });
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -24,12 +22,22 @@ export default function SignUpPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
     setError(null);
 
+    // ✅ Password match check before sending to backend
+    if (formData.password !== formData.confirm_password) {
+      setError('Passwords do not match.');
+      return;
+    }
+
+    setIsLoading(true);
+
     try {
-      await axiosInstance.post('/auth/register', formData);
-      // On success, redirect to the sign-in page
+      await axiosInstance.post('/auth/register', {
+        user_name: formData.user_name,
+        user_email: formData.user_email,
+        password: formData.password,
+      });
       router.push('/signin');
     } catch (err: any) {
       setError(err.response?.data?.detail || 'An unexpected error occurred.');
@@ -39,61 +47,88 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-          Create your account
-        </h2>
-      </div>
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="border border-2 border-[#d9a066] rounded-xl w-[340px] shadow-lg mb-40">
+        
+        {/* Title bar */}
+        <div className="bg-[#f2b37f] px-3 py-1 flex items-center justify-between rounded-t-lg border-b-2 border-[#d9a066]">
+          <span className="text-sm font-medium text-gray-700">Sign Up</span>
+          <div className="flex space-x-1">
+            <span className="w-3 h-3 rounded-full bg-green-500" />
+            <span className="w-3 h-3 rounded-full bg-yellow-500" />
+            <span className="w-3 h-3 rounded-full bg-red-500" />
+          </div>
+        </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <Input
-              id="user_name"
-              name="user_name"
-              type="text"
-              label="Username"
-              required
-              value={formData.user_name}
-              onChange={handleChange}
-            />
-            <Input
-              id="user_email"
-              name="user_email"
-              type="email"
-              label="Email address"
-              autoComplete="email"
-              required
-              value={formData.user_email}
-              onChange={handleChange}
-            />
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              label="Password"
-              autoComplete="current-password"
-              required
-              value={formData.password}
-              onChange={handleChange}
-            />
+        {/* Content */}
+        <div className="px-6 py-6">
+          <h2 className="text-center text-2xl font-bold text-[#3b2f2f] mb-6">Create Account</h2>
+          
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-[#3b2f2f] mb-1">Username</label>
+              <input
+                type="text"
+                name="user_name"
+                placeholder="Username"
+                value={formData.user_name}
+                onChange={handleChange}
+                className="w-full rounded border-2 bg-white border-[#d9a066] text-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-[#3b2f2f] mb-1">Email</label>
+              <input
+                type="email"
+                name="user_email"
+                placeholder="Email"
+                value={formData.user_email}
+                onChange={handleChange}
+                className="w-full rounded border-2 bg-white border-[#d9a066] text-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-[#3b2f2f] mb-1">Password</label>
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full rounded border-2 bg-white border-[#d9a066] text-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-[#3b2f2f] mb-1">Confirm Password</label>
+              <input
+                type="password"
+                name="confirm_password"
+                placeholder="Confirm Password"
+                value={formData.confirm_password}
+                onChange={handleChange}
+                className="w-full rounded border-2 bg-white border-[#d9a066] text-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
+              />
+            </div>
 
             {error && <p className="text-sm text-red-600">{error}</p>}
 
-            <div>
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? 'Creating account...' : 'Sign up'}
-              </Button>
+            {/* Buttons */}
+            <div className="flex space-x-4 pt-2">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="flex-1 bg-[#74c7d3] hover:bg-[#66b9c5] text-[#04313d] font-semibold py-2 rounded transition"
+              >
+                {isLoading ? 'Creating...' : 'Sign Up'}
+              </button>
+              <Link
+                href="/signin"
+                className="flex-1 text-center bg-[#f2a65a] hover:bg-[#e5964d] text-[#3b2f2f] font-semibold py-2 rounded transition"
+              >
+                Login
+              </Link>
             </div>
           </form>
-
-          <p className="mt-6 text-center text-sm text-gray-600">
-            Already a member?{' '}
-            <Link href="/signin" className="font-medium text-indigo-600 hover:text-indigo-500">
-              Sign in
-            </Link>
-          </p>
         </div>
       </div>
     </div>

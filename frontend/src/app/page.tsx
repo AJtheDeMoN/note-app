@@ -9,15 +9,9 @@ import axiosInstance from '@/lib/axios';
 import NoteCard from '@/components/ui/NoteCard';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
-import Input from '@/components/ui/Input';
 import { Plus } from 'lucide-react';
-
-// Type definition for a single note
-type Note = {
-  note_id: string;
-  note_title: string;
-  note_content: string;
-};
+import NoteForm from '@/components/notes/NoteForm'; // Import the new component
+import type { Note } from '@/types'; // Import the new type
 
 // Main Page Component
 export default function HomePage() {
@@ -30,14 +24,10 @@ export default function HomePage() {
 
   // --- Route Protection ---
   useEffect(() => {
-    // A timeout helps prevent a flicker effect on page load while auth state is hydrating
-    const timer = setTimeout(() => {
-      if (!isAuthenticated) {
-        router.push('/signin');
-      }
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [isAuthenticated, router]);
+    if (_hasHydrated && !isAuthenticated) {
+      router.push('/signin');
+    }
+  }, [_hasHydrated, isAuthenticated, router]);
 
   // --- Data Fetching (React Query) ---
   const {
@@ -50,7 +40,7 @@ export default function HomePage() {
       const response = await axiosInstance.get('/notes/');
       return response.data;
     },
-    enabled: isAuthenticated, // Only fetch data if the user is logged in
+    enabled: _hasHydrated && isAuthenticated,
   });
 
   // --- Data Mutations (React Query) with Error Handling ---
@@ -112,123 +102,66 @@ export default function HomePage() {
   };
 
   // --- Render Logic ---
-  // Show a loading indicator while checking auth state to prevent UI flicker
-
   if (!_hasHydrated) {
     return <div className="text-center pt-16">Loading session...</div>;
   }
 
-  if (!isAuthenticated) {
-    return <div className="text-center pt-16">Loading...</div>;
-  }
-
   return (
-    <div>
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">My Notes</h1>
-        <Button onClick={handleOpenCreateModal} className="w-auto">
-          <Plus size={20} className="mr-2 inline" />
-          Create a new note
-        </Button>
-      </div>
-
-      {isLoading && <p className="mt-8 text-center">Loading notes...</p>}
-      {isError && <p className="mt-8 text-center text-red-500">Failed to load notes.</p>}
-
-      <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {notes?.map((note) => (
-          <NoteCard
-            key={note.note_id}
-            title={note.note_title}
-            content={note.note_content}
-            onEdit={() => handleOpenEditModal(note)}
-            onDelete={() => handleDelete(note.note_id)}
-          />
-        ))}
-      </div>
-
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title={currentNote ? 'Edit Note' : 'Create Note'}
-      >
-        <NoteForm
-          note={currentNote}
-          isLoading={createMutation.isPending || updateMutation.isPending}
-          onSave={(data) => {
-            if (currentNote) {
-              updateMutation.mutate({ ...data, note_id: currentNote.note_id });
-            } else {
-              createMutation.mutate(data);
-            }
-          }}
-          onCancel={() => setIsModalOpen(false)}
-        />
-      </Modal>
+  <div className='bg-[#FFFDD0]'>
+    {/* --- Header --- */}
+    <div className="flex items-center justify-between">
+      <h1 className="text-3xl font-bold text-[#414a25]">My Notes</h1>
+      {/* The old "Create a new note" button has been removed from here */}
     </div>
-  );
-}
 
-// --- Sub-component for the form inside the modal ---
-function NoteForm({
-  note,
-  onSave,
-  onCancel,
-  isLoading,
-}: {
-  note: Note | null;
-  onSave: (data: { note_title: string; note_content: string }) => void;
-  onCancel: () => void;
-  isLoading: boolean;
-}) {
-  const [title, setTitle] = useState(note?.note_title || '');
-  const [content, setContent] = useState(note?.note_content || '');
+    {/* --- Loading and Error States --- */}
+    {isLoading && <p className="mt-8 text-center">Loading notes...</p>}
+    {isError && <p className="mt-8 text-center text-red-500">Failed to load notes.</p>}
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim()) {
-      alert('Title cannot be empty.');
-      return;
-    }
-    onSave({ note_title: title, note_content: content });
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <Input
-        label="Title"
-        id="note_title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        required
-        disabled={isLoading}
-      />
-      <div>
-        <label htmlFor="note_content" className="block text-sm font-medium text-gray-700">
-          Content
-        </label>
-        <textarea
-          id="note_content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          rows={6}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50"
-          disabled={isLoading}
+    {/* --- Notes Grid --- */}
+    <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {notes?.map((note) => (
+        <NoteCard
+          key={note.note_id}
+          title={note.note_title}
+          content={note.note_content}
+          onEdit={() => handleOpenEditModal(note)}
+          lastModified={note.last_update}  // <-- was note.last_modified
         />
-      </div>
-      <div className="flex justify-end space-x-3 pt-4">
-        <Button
-          type="button"
-          onClick={onCancel}
-          className="w-auto bg-gray-200 text-gray-800 hover:bg-gray-300"
-          disabled={isLoading}
-        >
-          Cancel
-        </Button>
-        <Button type="submit" className="w-auto" disabled={isLoading}>
-          {isLoading ? 'Saving...' : 'Save'}
-        </Button>
-      </div>
-    </form>
-  );
+      ))}
+    </div>
+
+    {/* --- Modal for Creating/Editing Notes --- */}
+    <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <NoteForm
+        note={currentNote}
+        isLoading={createMutation.isPending || updateMutation.isPending}
+        onSave={(data) => {
+          if (currentNote) {
+            updateMutation.mutate({ ...data, note_id: currentNote.note_id });
+          } else {
+            createMutation.mutate(data);
+          }
+        }}
+        onClose={() => setIsModalOpen(false)}
+        // Pass the delete handler to the form
+        onDelete={() => {
+          if (currentNote) {
+            handleDelete(currentNote.note_id);
+            setIsModalOpen(false); // Close modal after initiating delete
+          }
+        }}
+      />
+    </Modal>
+
+    {/* --- ADD THIS NEW CIRCULAR BUTTON --- */}
+    <button
+      onClick={handleOpenCreateModal}
+      className="fixed bottom-8 right-8 flex h-14 w-14 items-center justify-center rounded-full bg-[#414a25] text-white shadow-lg transition-colors hover:bg-[#5a6b3f] focus:outline-none focus:ring-2 focus:ring-[#5a6b3f] focus:ring-offset-2"
+      aria-label="Create a new note"
+    >
+      <Plus size={28} />
+    </button>
+  </div>
+);
 }
