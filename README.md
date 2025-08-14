@@ -3,7 +3,7 @@ This is a modern, full-stack note-taking application built from the ground up as
 
 The project adheres to strict development constraints, including no pre-made UI component libraries, and a focus on clean, original, and well-documented code.
 
-### **🚀 How to Install and Run Locally**
+### **How to Install and Run Locally**
 Follow these steps to get the application running on your local machine.
 
 ### 1. Prerequisites
