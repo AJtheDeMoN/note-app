@@ -7,7 +7,6 @@ import { useAuthStore } from '@/store/authStore';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '@/lib/axios';
 import NoteCard from '@/components/ui/NoteCard';
-import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 import { Plus } from 'lucide-react';
 import NoteForm from '@/components/notes/NoteForm'; // Import the new component

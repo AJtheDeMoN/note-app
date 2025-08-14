@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import axiosInstance from '@/lib/axios';
+import { AxiosError } from 'axios';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -39,8 +40,12 @@ export default function SignUpPage() {
         password: formData.password,
       });
       router.push('/signin');
-    } catch (err: any) {
-      setError(err.response?.data?.detail || 'An unexpected error occurred.');
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        setError(err.response?.data?.detail || 'An unexpected error occurred.');
+      } else {
+        setError('An unexpected error occurred.');
+      }
     } finally {
       setIsLoading(false);
     }

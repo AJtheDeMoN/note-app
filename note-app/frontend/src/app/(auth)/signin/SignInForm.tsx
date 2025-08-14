@@ -1,5 +1,6 @@
 'use client';
 
+import { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -36,8 +37,12 @@ export default function SignInPage() {
         user_email: formData.username,
       });
       router.push('/');
-    } catch (err: any) {
-      setError(err.response?.data?.detail || 'An unexpected error occurred.');
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        setError(err.response?.data?.detail || 'An unexpected error occurred.');
+      } else {
+        setError('An unexpected error occurred.');
+      }
     } finally {
       setIsLoading(false);
     }

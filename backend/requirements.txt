@@ -1,5 +1,7 @@
 annotated-types==0.7.0
 anyio==4.10.0
+argon2-cffi==25.1.0
+argon2-cffi-bindings==25.1.0
 bcrypt==4.3.0
 bidict==0.23.1
 blinker==1.9.0
@@ -22,7 +24,6 @@ Flask-Login==0.6.3
 gevent==25.5.1
 geventhttpclient==2.3.4
 greenlet==3.2.4
-gunicorn
 h11==0.16.0
 httpcore==1.0.9
 httptools==0.6.4
