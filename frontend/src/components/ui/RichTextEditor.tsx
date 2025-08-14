@@ -1,4 +1,3 @@
-// src/components/ui/RichTextEditor.tsx
 'use client';
 
 import { useEditor, EditorContent } from '@tiptap/react';
@@ -21,7 +20,6 @@ const MenuBar = ({ editor }: { editor: any }) => {
   ];
 
   return (
-    // Updated the border color to match the editor
     <div className="mb-2 flex flex-wrap items-center gap-2 rounded-md border-2 border-[#6b3323] bg-gray-50 p-2">
       {buttons.map((btn, index) => (
         <button
@@ -37,7 +35,6 @@ const MenuBar = ({ editor }: { editor: any }) => {
   );
 };
 
-// The main editor component
 interface RichTextEditorProps {
   content: string;
   onChange: (htmlContent: string) => void;
@@ -53,10 +50,8 @@ export default function RichTextEditor({ content, onChange, disabled }: RichText
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
-    // --- THIS IS THE UPDATED PART ---
     editorProps: {
       attributes: {
-        // Apply your custom styling classes here
         class: "w-full rounded border-2 border-[#6b3323] bg-white text-red-500 p-3 mb-14 shadow-inner focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-50",
       },
     },
@@ -65,9 +60,7 @@ export default function RichTextEditor({ content, onChange, disabled }: RichText
   if (!editor) {
     return null;
   }
-
-  // Set the min-height dynamically for the editor's content area
-  editor.view.dom.style.minHeight = '240px'; // Equivalent to rows={10}
+  editor.view.dom.style.minHeight = '240px'; 
 
   return (
     <div>

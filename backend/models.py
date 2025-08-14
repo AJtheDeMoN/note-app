@@ -4,9 +4,7 @@ from typing import Optional
 from datetime import datetime
 import uuid
 
-# ==================
 # User Models
-# ==================
 class UserBase(BaseModel):
     user_name: str
     user_email: EmailStr
@@ -24,9 +22,7 @@ class UserPublic(BaseModel):
     user_name: str
     user_email: EmailStr
     
-# ==================
 # Note Models
-# ==================
 class NoteBase(BaseModel):
     note_title: str
     note_content: str
@@ -43,9 +39,7 @@ class NotePublic(NoteBase):
     created_on: datetime
     last_update: datetime
 
-# ==================
 # Token Models
-# ==================
 class Token(BaseModel):
     access_token: str
     token_type: str

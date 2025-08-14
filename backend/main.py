@@ -1,23 +1,36 @@
-# backend/main.py
+# backend/app/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from contextlib import asynccontextmanager
+import pymongo
 
-# Load environment variables from .env file BEFORE other imports
 load_dotenv()
 
+from .database import user_collection, note_collection
 from .routers import users, notes
 
-app = FastAPI(title="Notes Taking App API")
+# Lifespan manager to run code on startup and shutdown
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("Creating database indexes...")
+    try:
+        await user_collection.create_index("user_email", unique=True)
+        await note_collection.create_index("owner_id")
+        print("Database indexes created successfully.")
+    except Exception as e:
+        print(f"Error creating indexes: {e}")
 
-# CORS (Cross-Origin Resource Sharing)
-# This allows your Next.js frontend (running on a different port) to talk to this API.
-origins = [
-    "http://localhost:3000",  # The default Next.js dev server
-    "http://127.0.0.1:3000",
-    "*"
-]
+    yield
+    print("Application shutting down.")
 
+
+app = FastAPI(
+    title="Notes Taking App API",
+    lifespan=lifespan  
+)
+
+# CORS Middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

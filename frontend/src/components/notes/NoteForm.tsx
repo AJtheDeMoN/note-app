@@ -1,4 +1,3 @@
-// src/components/notes/NoteForm.tsx
 'use client';
 
 import { useState } from 'react';
@@ -63,7 +62,6 @@ export default function NoteForm({
         </button>
       </div>
 
-      {/* --- FULL-WIDTH THICKER SEPARATOR LINE --- */}
       <hr className="border-t-2 border-red-400 m-0" />
 
       {/* Form for content and buttons */}
@@ -74,7 +72,7 @@ export default function NoteForm({
           disabled={isLoading}
         />
 
-        {/* --- FIXED BUTTONS AT BOTTOM RIGHT --- */}
+        {/* Fixed button at bottom right */}
         <div className="absolute bottom-4 right-4 flex space-x-2">
           <Button
             type="submit"

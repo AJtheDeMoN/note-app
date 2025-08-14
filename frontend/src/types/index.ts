@@ -1,5 +1,3 @@
-// src/types/index.ts
-
 export type Note = {
   note_id: string;
   note_title: string;

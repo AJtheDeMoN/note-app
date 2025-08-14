@@ -1,7 +1,5 @@
 # .gitignore
 
-# Top-Level / General
-# -------------------
 # Environment variables
 .env
 .env.local
@@ -16,8 +14,6 @@
 Thumbs.db
 
 
-# Frontend (Next.js)
-# --------------------
 # Dependency directories
 node_modules/
 
@@ -25,18 +21,8 @@ node_modules/
 .next/
 out/
 
-# Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-
-# Backend (Python / FastAPI)
-# --------------------------
 # Virtual environment
 venv/
-.venv/
-env/
 
 # Python cache
 __pycache__/

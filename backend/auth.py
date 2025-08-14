@@ -8,8 +8,11 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
-# Password Hashing Setup
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Password Hashing
+pwd_context = CryptContext(
+    schemes=["argon2", "bcrypt"],
+    deprecated="auto",
+)
 
 # OAuth2 Scheme
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
@@ -37,7 +40,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 # Dependency to get current user from token
 async def get_current_user(token: str = Depends(oauth2_scheme)):
-    from .database import user_collection, serialize_object # Local import to avoid circular dependency
+    from .database import user_collection, serialize_object 
     from . import models
     
     credentials_exception = HTTPException(

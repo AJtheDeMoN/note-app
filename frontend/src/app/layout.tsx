@@ -1,19 +1,25 @@
-// src/app/layout.tsx
-
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import './globals.css'; // <-- Add this import
+import './globals.css'; 
 import Providers from './provider';
 import Navbar from '@/components/ui/Navbar';
 import HydrationManager from '@/components/HydrationManager';
-// We no longer need GlobalStyles, so you can remove this import
-// import GlobalStyles from '@/components/GlobalStyles'; 
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Notes App',
-  description: 'A simple notes taking app',
+  title: {
+    template: '%s | NotesApp',
+    default: 'NotesApp - Your Personal Notebook', 
+  },
+  description: 'A modern, full-stack notes taking application built with Next.js and FastAPI.',
+  keywords: ['Notes', 'Next.js', 'FastAPI', 'React', 'Productivity'],
+  openGraph: {
+    title: 'NotesApp',
+    description: 'Your personal notebook in the cloud.',
+    type: 'website',
+    siteName: 'NotesApp',
+  },
 };
 
 export default function RootLayout({
@@ -23,7 +29,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* The GlobalStyles component is no longer needed here */}
       <body className={inter.className}>
         <HydrationManager />
         <Providers>

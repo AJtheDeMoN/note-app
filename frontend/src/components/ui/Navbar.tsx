@@ -1,12 +1,9 @@
-// src/components/ui/Navbar.tsx
 'use client';
 
 import Link from 'next/link';
 import { useAuthStore } from '../../store/authStore';
 
 const Navbar = () => {
-  // Note: This won't be reactive immediately due to hydration.
-  // We'll fix this reactivity later with a dedicated client component.
   const { isAuthenticated, logout } = useAuthStore();
 
   return (

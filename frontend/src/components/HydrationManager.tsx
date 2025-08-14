@@ -1,4 +1,3 @@
-// src/components/HydrationManager.tsx
 'use client';
 
 import { useAuthStore } from '@/store/authStore';

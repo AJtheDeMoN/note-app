@@ -1,10 +1,9 @@
-// src/components/ui/NoteCard.tsx
 import { Settings } from 'lucide-react';
 
 type NoteCardProps = {
   title: string;
-  content: string; // HTML string
-  lastModified: string; // ISO string
+  content: string; 
+  lastModified: string; 
   onEdit: () => void;
 };
 

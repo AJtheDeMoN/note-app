@@ -1,4 +1,3 @@
-// src/components/GlobalStyles.tsx
 'use client';
 
 export default function GlobalStyles() {

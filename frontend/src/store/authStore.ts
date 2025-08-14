@@ -1,4 +1,3 @@
-// src/store/authStore.ts
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -13,7 +12,7 @@ type AuthState = {
   user: User | null;
   isAuthenticated: boolean;
   _hasHydrated: boolean;
-  setHasHydrated: (state: boolean) => void; // Add this action
+  setHasHydrated: (state: boolean) => void; 
   setToken: (token: string) => void;
   setUser: (user: User) => void;
   logout: () => void;
@@ -26,7 +25,7 @@ export const useAuthStore = create(
       user: null,
       isAuthenticated: false,
       _hasHydrated: false,
-      setHasHydrated: (state) => { // Implement the action
+      setHasHydrated: (state) => {
         set({
           _hasHydrated: state,
         });
@@ -42,7 +41,7 @@ export const useAuthStore = create(
       },
     }),
     {
-      name: 'auth-storage', // This is the only option we need now
+      name: 'auth-storage',
     }
   )
 );

@@ -111,10 +111,8 @@ export default function HomePage() {
     {/* --- Header --- */}
     <div className="flex items-center justify-between">
       <h1 className="text-3xl font-bold text-[#414a25]">My Notes</h1>
-      {/* The old "Create a new note" button has been removed from here */}
     </div>
 
-    {/* --- Loading and Error States --- */}
     {isLoading && <p className="mt-8 text-center">Loading notes...</p>}
     {isError && <p className="mt-8 text-center text-red-500">Failed to load notes.</p>}
 
@@ -131,7 +129,6 @@ export default function HomePage() {
       ))}
     </div>
 
-    {/* --- Modal for Creating/Editing Notes --- */}
     <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
       <NoteForm
         note={currentNote}
@@ -144,11 +141,10 @@ export default function HomePage() {
           }
         }}
         onClose={() => setIsModalOpen(false)}
-        // Pass the delete handler to the form
         onDelete={() => {
           if (currentNote) {
             handleDelete(currentNote.note_id);
-            setIsModalOpen(false); // Close modal after initiating delete
+            setIsModalOpen(false); 
           }
         }}
       />
