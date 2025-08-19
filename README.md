@@ -115,3 +115,20 @@ While the core UI was hand-crafted, a few external libraries were used to implem
     - **Purpose**: For backend performance testing.
 
     - **Justification**: Locust is a modern, Python-based load testing tool. It was chosen because it allows for defining user behavior with simple Python code, which perfectly matched the requirement to simulate a user logging in and then repeatedly fetching their notes.
+
+
+## Application Screenshots
+
+Below are some screenshots of the Notes Taking App UI.
+
+### 1. Login Page
+![Login Page](./images/login.png)
+
+### 2. Signup Page
+![Signup Page](./images/signup.png)
+
+### 3. Homepage (Notes List)
+![Homepage](./images/homepage.png)
+
+### 4. Add Note Page
+![Add Note](./images/add-note.png)
